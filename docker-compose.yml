@@ -1,0 +1,48 @@
+version: "3.8"
+
+networks:
+    cazoo:
+      driver: bridge
+
+services:
+    mongodb:
+        image: mongo
+        restart: always
+        container_name: cazoo-db
+        ports:
+            - 27017:27017
+        command: mongod --noauth
+        networks:
+            - cazoo
+    client:
+        build: ./frontend
+        image: cazoo-frontend
+        volumes:
+            - './frontend:/app'
+            - '/app/node_modules'
+        environment:
+            CHOKIDAR_USEPOLLING: "true"
+        restart: always
+        container_name: cazoo-frontend
+        ports:
+            - 3000:3000
+        links:
+            - api
+        networks:
+            - cazoo
+    api:
+        build: ./backend
+        image: cazoo-backend
+        volumes:
+            - './backend:/app'
+            - '/app/node_modules'
+        environment:
+            CHOKIDAR_USEPOLLING: "true"
+        container_name: cazoo-backend
+        restart: always
+        ports:
+            - 3001:3001
+        depends_on:
+            - mongodb
+        networks:
+            - cazoo

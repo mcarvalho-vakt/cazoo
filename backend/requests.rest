@@ -1,0 +1,1 @@
+GET http://localhost:3001/cars?page=1&limit=2&color=Red
