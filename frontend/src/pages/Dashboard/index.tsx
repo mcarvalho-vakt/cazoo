@@ -43,7 +43,7 @@ const Dashboard = () => {
         
         const {data} = await get<Car[]>(url);
       return data;
-    } 
+    }
     const { isLoading, isError, error, data: cars, isPreviousData } = useQuery<Car[], Error>(['cars', {page, color, maker, sort}], () => fetchProjects({page, color, maker, sort}), { keepPreviousData : true })
     
     const handlePreviousPage = () => {
